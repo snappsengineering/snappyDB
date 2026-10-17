@@ -7,7 +7,7 @@ swift build
 swift test --enable-code-coverage
 ```
 
-Toolchain depends on the OS floor of the commit you are on — see [VERSIONING.md](VERSIONING.md). The `26.0` tag expects Swift 6.2+ and Xcode 26+.
+Toolchain depends on the OS floor of the commit you are on — see [VERSIONING.md](VERSIONING.md). The `27.0` tag expects Swift 6.4+ and Xcode 27+.
 
 ## Rules
 
