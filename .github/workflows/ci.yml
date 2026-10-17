@@ -50,7 +50,7 @@ jobs:
 
     needs: commit_gate
     if: needs.commit_gate.outputs.skip != 'true'
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -80,7 +80,7 @@ jobs:
 
     needs: commit_gate
     if: needs.commit_gate.outputs.skip != 'true'
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -91,14 +91,18 @@ jobs:
 
     needs: commit_gate
     if: needs.commit_gate.outputs.skip != 'true'
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: iOS
-            device: iPhone 16
+            device: iPhone 17
+          - name: tvOS
+            device: Apple TV 4K (3rd generation)
+          - name: watchOS
+            device: Apple Watch Series 11 (46mm)
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Test on simulator
@@ -167,41 +171,19 @@ jobs:
           xcodebuild test -scheme SnappyDB \
             -destination "id=$UDID" \
             CODE_SIGNING_ALLOWED=NO
-  platforms:
-    name: Build ${{ matrix.name }}
-
-    needs: commit_gate
-    if: needs.commit_gate.outputs.skip != 'true'
-    runs-on: macos-15
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: tvOS
-            destination: generic/platform=tvOS
-          - name: watchOS
-            destination: generic/platform=watchOS
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-      - name: Build package
-        run: |
-          xcodebuild build -scheme SnappyDB \
-            -destination '${{ matrix.destination }}' \
-            CODE_SIGNING_ALLOWED=NO
   example:
     name: Build Example app
 
     needs: commit_gate
     if: needs.commit_gate.outputs.skip != 'true'
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Build SnappyDBDemo
         env:
           PLATFORM: iOS
-          DEVICE: iPhone 16
+          DEVICE: iPhone 17
         run: |
           xcrun simctl list devices available -j > devices.json
           RES=$(python3 - devices.json "$PLATFORM" "$DEVICE" <<'PY'
@@ -245,7 +227,7 @@ jobs:
 
     needs: commit_gate
     if: needs.commit_gate.outputs.skip != 'true'
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
